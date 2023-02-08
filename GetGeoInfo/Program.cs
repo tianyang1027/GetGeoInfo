@@ -17,7 +17,7 @@ namespace GetGeoInfo
     {
         static async Task Main(string[] args)
         {
-            string path = @"C:\Users\v-yangtian\Desktop\门店信息汇总-20230202.xlsx";
+            string path = @"C:\Users\v-yangtian\Desktop\门店信息汇总-20230208.xlsx";
             var fs = File.OpenRead(path);
             var wb = new XSSFWorkbook(fs);
             var sheet1 = wb.GetSheetAt(0);
@@ -26,7 +26,11 @@ namespace GetGeoInfo
                 IRow row = sheet1.GetRow(i);
                 if (row != null && row.RowNum != 0)
                 {
-                    string address = (row.GetCell(1).ToString() + row.GetCell(2).ToString() + row.GetCell(3).ToString() + row.GetCell(4).ToString() + row.GetCell(5).ToString()).Trim();
+                    string address =string.Empty;
+                    for (int j = 1; j < 6; j++)
+                    {
+                        address += row.GetCell(j).ToString().Trim();
+                    }
                     var location = await GeocodingMap.GeLocation(address);
                     row.Cells[6].SetCellValue(location);
                 }
